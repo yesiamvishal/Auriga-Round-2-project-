@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="A simple equal-share pool tracker with settlement suggestions.">
+  <title>Fair Share | Pool tracker</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="shell">
+    <header class="topbar">
+      <div class="brand"><span class="brand-mark">₹</span><span>Fair Share</span></div>
+      <div class="top-actions">
+        <button class="button button-quiet" id="loadExample" type="button">Load example</button>
+        <button class="button button-quiet" id="resetPool" type="button">Reset</button>
+      </div>
+    </header>
+
+    <section class="intro" aria-labelledby="pageTitle">
+      <div>
+        <p class="eyebrow">Shared pool / <span id="participantCount">0 people</span></p>
+        <h1 id="pageTitle">Chipping in,<br><em>without the chase.</em></h1>
+        <p class="intro-copy">See who is covered, who still owes, and the fewest transfers needed to settle up.</p>
+      </div>
+      <div class="pool-setup">
+        <label>Pool name<input id="poolName" type="text" maxlength="60" placeholder="e.g. Farewell gift"></label>
+        <label>Target amount<input id="targetAmount" type="number" min="0" step="0.01" inputmode="decimal"></label>
+      </div>
+    </section>
+
+    <section class="summary-grid" aria-label="Pool summary">
+      <article class="summary-card summary-main"><span class="summary-label">Collected</span><strong id="collectedAmount">₹0</strong><div class="progress"><span id="progressBar"></span></div><small id="progressLabel">₹0 of ₹0</small></article>
+      <article class="summary-card"><span class="summary-label">Still to collect</span><strong id="remainingAmount">₹0</strong><small id="remainingLabel">Everyone is settled</small></article>
+      <article class="summary-card"><span class="summary-label">Equal share</span><strong id="shareAmount">₹0</strong><small id="shareLabel">Add people to split the pool</small></article>
+      <article class="summary-card"><span class="summary-label">Pool status</span><strong id="statusText">Getting started</strong><small id="statusLabel">Add a target and people</small></article>
+    </section>
+
+    <div class="workspace">
+      <section class="panel people-panel" aria-labelledby="peopleHeading">
+        <div class="panel-heading"><div><p class="eyebrow">01 / Contributions</p><h2 id="peopleHeading">People</h2></div><span class="muted" id="paidCount">0 paid</span></div>
+        <div class="people-head" aria-hidden="true"><span>Person</span><span>Paid so far</span><span>Balance</span><span></span></div>
+        <div id="peopleList" class="people-list"></div>
+        <form id="addPersonForm" class="add-person"><input id="newPersonName" required maxlength="40" type="text" placeholder="Add a person"><button class="button button-dark" type="submit">+ Add person</button></form>
+      </section>
+
+      <section class="panel settlement-panel" aria-labelledby="settlementHeading">
+        <div class="panel-heading"><div><p class="eyebrow">02 / Finish cleanly</p><h2 id="settlementHeading">Settlement plan</h2></div><span class="settlement-count" id="settlementCount">0 transfers</span></div>
+        <p class="panel-note">A compact way to get every balance back to zero. Senders pay recipients directly.</p>
+        <div id="settlementList" class="settlement-list"></div>
+      </section>
+    </div>
+
+    <footer><span>Data stays in this browser.</span><span>Fair share, fewer messages.</span></footer>
+  </main>
+  <script src="script.js"></script>
+</body>
+</html>
