@@ -26,6 +26,24 @@ The app stores the current pool in the browser's `localStorage`, so refreshing t
 
 The settlement calculation is based on the current balances, so it remains useful when the target is overfunded or someone pays extra. Amounts are shown in Indian rupees and are rounded to the nearest paise.
 
+## Screenshots
+
+### Pool dashboard
+
+![Fair Share pool dashboard](screenshots/dashboard-top.png)
+
+### Settlement plan
+
+![Fair Share settlement plan](screenshots/settlement-plan.png)
+
+To add or update the screenshots on GitHub, run:
+
+```bash
+git add screenshots README.md
+git commit -m "Add project screenshots"
+git push origin main
+```
+
 ## Debugging
 
 - Open browser developer tools and check the Console for JavaScript errors.
