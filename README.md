@@ -97,22 +97,6 @@ git commit -m "Update Fair Share documentation"
 git push origin main
 ```
 
-To add or update only the screenshots and README:
-
-```bash
-git add screenshots README.md
-git commit -m "Add project screenshots"
-git push origin main
-```
-
-## Debugging
-
-- Open browser developer tools and check the **Console** for JavaScript errors.
-- Confirm the page loads `style.css` and `script.js` from the same folder as `index.html`.
-- If old values appear, click **Reset** or clear the `fair-share-pool` local-storage key.
-- Check JavaScript syntax from the project root with `node --check script.js`.
-- Check whitespace errors with `git diff --check`.
-
 ## Project structure
 
 | File | Purpose |
