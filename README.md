@@ -1,8 +1,13 @@
 # Fair Share
 
+[Live Demo](https://yesiamvishal.github.io/Auriga-Round-2-project-/)
 > A simple shared-expense tracker that turns messy contributions into clear balances and a practical settlement plan.
 
 Fair Share helps an organiser manage a group collection such as a farewell gift, team lunch, trip, or shared subscription. Add the target amount, record what each person has paid, and the app calculates the equal share and who should pay whom.
+
+
+
+
 
 ## Highlights
 
