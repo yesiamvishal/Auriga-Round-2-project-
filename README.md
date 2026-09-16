@@ -116,3 +116,7 @@ git push origin main
 ## Scope
 
 The current version intentionally focuses on equal shares and simple balances. Unequal contributions, login, payment links, multi-device collaboration, and a shared backend are possible future extensions, but are outside the scope of this lightweight static implementation.
+
+---
+
+**Created by: Vishal Jangid**
