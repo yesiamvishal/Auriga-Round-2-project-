@@ -36,6 +36,18 @@
       <article class="summary-card"><span class="summary-label">Pool status</span><strong id="statusText">Getting started</strong><small id="statusLabel">Add a target and people</small></article>
     </section>
 
+    <section class="panel import-panel" aria-labelledby="importHeading">
+      <div class="panel-heading"><div><p class="eyebrow">Import / Clean history</p><h2 id="importHeading">Bring in past contributions</h2></div><span class="muted">CSV or pasted text</span></div>
+      <p class="panel-note">Use two columns: <strong>name</strong> and <strong>amount</strong>. We clean spacing and capitalization, merge name variants, remove duplicate rows, and flag invalid entries before changing the pool.</p>
+      <div class="import-tools">
+        <label class="file-picker">Choose a CSV file<input id="importFile" type="file" accept=".csv,.txt,text/csv,text/plain"></label>
+        <button class="button button-quiet" id="loadMessyExample" type="button">Load messy example</button>
+        <button class="button button-dark" id="importContributions" type="button">Review and import</button>
+      </div>
+      <label class="import-input-label">Contribution list<textarea id="importText" rows="6" placeholder="name, amount\nAarav, ₹1,500\nDiya, 900"></textarea></label>
+      <div id="importReport" class="import-report" aria-live="polite"><span>Import report will appear here after you review a list.</span></div>
+    </section>
+
     <div class="workspace">
       <section class="panel people-panel" aria-labelledby="peopleHeading">
         <div class="panel-heading"><div><p class="eyebrow">01 / Contributions</p><h2 id="peopleHeading">People</h2></div><span class="muted" id="paidCount">0 paid</span></div>

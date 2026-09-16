@@ -15,6 +15,7 @@ Fair Share helps an organiser manage a group collection such as a farewell gift,
 - See the total collected, amount remaining, equal share, and pool status at a glance.
 - Identify people who owe money, are exactly even, or have paid extra.
 - Generate a compact payer-to-recipient settlement plan.
+- Import messy contribution history and get an audit report for cleaned, duplicate, merged, and rejected rows.
 - Keep data across refreshes with browser `localStorage`.
 - Use the included example to understand the workflow immediately.
 - Run and deploy as a static site with no framework, build tool, or backend.
@@ -65,6 +66,18 @@ You can also open `index.html` directly, but a local server provides a closer pr
 6. Follow the **Settlement plan** to finish the pool with direct payments.
 
 Use **Load example** to restore the farewell-gift scenario. Use **Reset** to clear the current pool.
+
+### Import past contributions
+
+The **Bring in past contributions** panel accepts a CSV or pasted list with `name` and `amount` columns. It handles common messy input such as:
+
+- `₹1,500`, `1 500`, `900.00`, and other amount formatting differences.
+- Extra spaces and capitalization differences in names.
+- Repeated identical rows, which are counted and removed.
+- Name variants that are close enough to identify as the same person, which are merged under the first spelling found.
+- Missing names, invalid amounts, negative amounts, and other unusable rows, which are rejected with a line number and reason.
+
+Click **Load messy example** to see all of these cases, then click **Review and import**. The report shows the number of valid rows, people created, duplicate rows removed, rows merged into existing names, and rows rejected. Valid cleaned totals replace the current contribution list while keeping the pool name and target amount.
 
 ## How it works
 

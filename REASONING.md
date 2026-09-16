@@ -17,6 +17,7 @@ The first version therefore focuses on equal shares and simple cash balances. It
 - Each person has one paid amount. Their balance is `paid - equal share`: a negative value means they still owe, while a positive value means they are owed money back.
 - Summary cards answer the organiser's recurring questions before they need to inspect the people list.
 - A compact settlement panel translates balances into direct transfers, avoiding a long chain of repayments.
+- A contribution import panel accepts realistic messy history and reports every cleaning decision instead of silently hiding data quality problems.
 - Data is saved to `localStorage`. This keeps the app useful on refresh while preserving the no-backend, static-hosting requirement.
 
 ## Settlement algorithm
@@ -24,6 +25,12 @@ The first version therefore focuses on equal shares and simple cash balances. It
 The app creates two lists from the balances: debtors with negative balances and creditors with positive balances. It sorts both by absolute balance, then repeatedly matches the largest remaining debtor with the largest remaining creditor. Each transfer is the smaller of those two amounts. Once one side reaches zero, the next person is matched.
 
 This greedy approach produces a short, easy-to-follow list for the app's equal-share use case. It also handles partial payments, overpayments, unpaid people, and a pool that has already exceeded its target.
+
+## Import cleaning
+
+Historical contribution rows are parsed from CSV, tab-separated, or semicolon-separated text. The cleaner removes currency symbols, commas, and spacing from amounts, then rejects blank names, invalid values, and negative payments. It identifies exact duplicate rows using a normalized name plus amount key. Names are normalized for case, punctuation, and repeated spaces; a small edit-distance check also catches simple spelling variants. The first valid spelling becomes the display name, while later valid rows add to that person's total.
+
+The import report makes the transformation auditable by showing valid rows, resulting people, duplicates removed, merged rows, and rejected rows with line-specific reasons. Import replaces the current people list only after parsing, which makes the result predictable and avoids partially applying a bad file.
 
 ## Scope and trade-offs
 

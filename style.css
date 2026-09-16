@@ -31,6 +31,25 @@ input:focus { border-color:var(--green-deep); box-shadow:0 0 0 3px #b8e36d55; }
 .summary-main small { color:var(--green-deep); }
 .progress { height:6px; margin-top:13px; overflow:hidden; background:#ffffff88; border-radius:5px; }
 .progress span { display:block; height:100%; width:0; border-radius:5px; background:var(--green-deep); transition:width .3s ease; }
+.import-panel { margin-bottom:10px; padding:25px; }
+.import-panel .panel-heading { margin-bottom:12px; }
+.import-tools { display:flex; align-items:center; gap:9px; margin-bottom:12px; }
+.file-picker { display:inline-flex; align-items:center; width:auto; min-height:39px; padding:0 13px; border:1px solid var(--line); border-radius:4px; color:var(--ink); background:transparent; font-family:'Space Grotesk', sans-serif; font-size:13px; font-weight:600; text-transform:none; cursor:pointer; }
+.file-picker:hover { border-color:var(--ink); }
+.file-picker input { display:none; }
+.import-input-label { gap:6px; }
+.import-input-label textarea { width:100%; min-height:125px; resize:vertical; border:1px solid var(--line); border-radius:3px; padding:12px; outline:none; color:var(--ink); background:var(--white); font-family:'DM Mono', monospace; font-size:12px; line-height:1.55; }
+.import-input-label textarea:focus { border-color:var(--green-deep); box-shadow:0 0 0 3px #b8e36d55; }
+.import-report { display:grid; gap:10px; margin-top:14px; padding:14px; border:1px solid var(--line); background:#f0f2eb; color:var(--muted); font-size:12px; line-height:1.45; }
+.import-report.has-results { color:var(--ink); }
+.import-report strong { color:var(--ink); }
+.report-stats { display:flex; flex-wrap:wrap; gap:8px; }
+.report-stat { padding:6px 8px; border:1px solid var(--line); background:var(--white); font-family:'DM Mono', monospace; font-size:10px; }
+.report-stat.good { border-color:#a7cb66; color:var(--green-deep); }
+.report-stat.warn { border-color:#e4c66e; color:#81651a; }
+.report-stat.bad { border-color:#e0aaa2; color:var(--red); }
+.report-details { display:grid; gap:4px; }
+.report-details span { color:var(--muted); }
 .workspace { display:grid; grid-template-columns:1.25fr .75fr; gap:10px; }
 .panel { min-width:0; border:1px solid var(--line); border-radius:5px; background:var(--white); }
 .people-panel { padding:25px 25px 20px; }
@@ -62,4 +81,4 @@ h2 { margin:0; font-size:25px; letter-spacing:-.055em; }
 .transfer-amount { grid-column:1 / -1; margin-top:5px; color:var(--green-deep); font-family:'DM Mono', monospace; font-size:12px; text-align:center; }
 footer { display:flex; justify-content:space-between; padding:22px 0 34px; color:var(--muted); font-family:'DM Mono', monospace; font-size:10px; text-transform:uppercase; }
 @media (max-width:850px) { .summary-grid { grid-template-columns:repeat(2, 1fr); } .workspace { grid-template-columns:1fr; } }
-@media (max-width:620px) { .shell { width:min(100% - 28px, 560px); } .topbar { padding-top:18px; } .top-actions .button { padding:9px; font-size:11px; } .intro { display:block; padding:45px 0 35px; } h1 { font-size:54px; } .pool-setup { grid-template-columns:1fr 1fr; min-width:0; margin-top:35px; } .summary-grid { gap:7px; margin-bottom:26px; } .summary-card { min-height:125px; padding:15px; } .summary-card strong { font-size:22px; } .people-panel, .settlement-panel { padding:18px 14px; } .people-head { display:none; } .person-row { grid-template-columns:minmax(80px, 1.2fr) minmax(90px, 1fr) minmax(80px, 1fr) 24px; gap:7px; padding:12px 0; } .paid-input { padding:8px 6px; } .add-person { display:grid; grid-template-columns:1fr auto; } footer { display:block; line-height:2; } footer span { display:block; } }
+@media (max-width:620px) { .shell { width:min(100% - 28px, 560px); } .topbar { padding-top:18px; } .top-actions .button { padding:9px; font-size:11px; } .intro { display:block; padding:45px 0 35px; } h1 { font-size:54px; } .pool-setup { grid-template-columns:1fr 1fr; min-width:0; margin-top:35px; } .summary-grid { gap:7px; margin-bottom:26px; } .summary-card { min-height:125px; padding:15px; } .summary-card strong { font-size:22px; } .import-panel { padding:18px 14px; } .import-tools { flex-wrap:wrap; } .import-tools .button-dark { flex:1; } .people-panel, .settlement-panel { padding:18px 14px; } .people-head { display:none; } .person-row { grid-template-columns:minmax(80px, 1.2fr) minmax(90px, 1fr) minmax(80px, 1fr) 24px; gap:7px; padding:12px 0; } .paid-input { padding:8px 6px; } .add-person { display:grid; grid-template-columns:1fr auto; } footer { display:block; line-height:2; } footer span { display:block; } }

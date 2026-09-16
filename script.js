@@ -11,6 +11,19 @@ const examplePool = {
     { id: 6, name: 'Sana', paid: 1800 }
   ]
 };
+const messyImportExample = `name,amount
+Aarav, ₹1,500
+aarav,1500
+ Diya , 900.00
+Kabir,₹0
+Meera, 1 800
+Rohan,not available
+Rohan,0
+Sana,1800
+Sana,1800
+,500
+Unknown,₹-200
+Meera,₹300`;
 
 let pool = readPool() || { name: 'New shared pool', target: 0, people: [] };
 
@@ -24,6 +37,80 @@ function readPool() {
 function savePool() { localStorage.setItem(STORAGE_KEY, JSON.stringify(pool)); }
 
 function getShare() { return pool.people.length ? pool.target / pool.people.length : 0; }
+
+function normalizeName(name) { return name.toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim().replace(/\s+/g, ' '); }
+
+function nameDistance(first, second) {
+  const previous = Array.from({ length: second.length + 1 }, (_, index) => index);
+  for (let row = 1; row <= first.length; row += 1) {
+    const current = [row];
+    for (let column = 1; column <= second.length; column += 1) {
+      current[column] = Math.min(current[column - 1] + 1, previous[column] + 1, previous[column - 1] + (first[row - 1] === second[column - 1] ? 0 : 1));
+    }
+    previous.splice(0, previous.length, ...current);
+  }
+  return previous[second.length];
+}
+
+function parseAmount(value) {
+  const cleaned = value.replace(/[₹$€£,\s]/g, '');
+  if (!cleaned || !/^\d+(\.\d{1,2})?$/.test(cleaned)) return null;
+  const amount = Number(cleaned);
+  return Number.isFinite(amount) ? amount : null;
+}
+
+function splitImportRow(line) {
+  const separator = line.includes('\t') ? '\t' : line.includes(';') ? ';' : ',';
+  const fields = line.split(separator).map(field => field.trim());
+  if (separator === ',' && fields.length > 2) return [fields[0], fields.slice(1).join('')];
+  return [fields[0], fields[1] || ''];
+}
+
+function findMatchingPerson(people, normalized) {
+  const exact = people.find(person => normalizeName(person.name) === normalized);
+  if (exact) return exact;
+  return people.find(person => {
+    const existing = normalizeName(person.name);
+    return normalized.length >= 4 && existing.length >= 4 && nameDistance(existing, normalized) <= 1;
+  });
+}
+
+function cleanImport(text) {
+  const result = { rows: 0, valid: 0, duplicates: 0, merged: 0, rejected: [], people: [] };
+  const seenRows = new Set();
+  text.split(/\r?\n/).forEach((line, index) => {
+    const trimmed = line.trim();
+    if (!trimmed) return;
+    const [rawName, rawAmount] = splitImportRow(trimmed);
+    if (index === 0 && normalizeName(rawName) === 'name') return;
+    result.rows += 1;
+    const name = rawName.trim().replace(/\s+/g, ' ');
+    const normalized = normalizeName(name);
+    const amount = parseAmount(rawAmount);
+    if (!normalized) { result.rejected.push(`Line ${index + 1}: missing person name`); return; }
+    if (amount === null) { result.rejected.push(`Line ${index + 1}: invalid amount for ${name}`); return; }
+    const rowKey = `${normalized}|${amount.toFixed(2)}`;
+    if (seenRows.has(rowKey)) { result.duplicates += 1; return; }
+    seenRows.add(rowKey);
+    result.valid += 1;
+    const matchingPerson = findMatchingPerson(result.people, normalized);
+    if (matchingPerson) {
+      matchingPerson.paid += amount;
+      result.merged += 1;
+    } else {
+      result.people.push({ id: Date.now() + result.people.length, name, paid: amount });
+    }
+  });
+  return result;
+}
+
+function renderImportReport(result) {
+  const report = document.querySelector('#importReport');
+  report.classList.add('has-results');
+  const rejectedText = result.rejected.length ? result.rejected.map(escapeHtml).join('<br>') : 'None';
+  const mergedText = result.merged ? `${result.merged} variant row${result.merged === 1 ? '' : 's'} merged into matching names.` : 'No name variants needed merging.';
+  report.innerHTML = `<div class="report-stats"><span class="report-stat good">${result.valid} valid rows</span><span class="report-stat good">${result.people.length} people</span><span class="report-stat warn">${result.duplicates} duplicates removed</span><span class="report-stat warn">${result.merged} rows merged</span><span class="report-stat ${result.rejected.length ? 'bad' : 'good'}">${result.rejected.length} rejected</span></div><div class="report-details"><strong>Cleaned totals ready: ${money(result.people.reduce((sum, person) => sum + person.paid, 0))}</strong><span>${mergedText}</span><span><strong>Rejected rows:</strong> ${rejectedText}</span></div>`;
+}
 
 function getSettlements() {
   const creditors = pool.people.map(person => ({ name: person.name, balance: person.paid - getShare() })).filter(person => person.balance > 0.005).sort((a, b) => b.balance - a.balance);
@@ -96,4 +183,7 @@ document.querySelector('#targetAmount').addEventListener('input', event => { poo
 document.querySelector('#addPersonForm').addEventListener('submit', event => { event.preventDefault(); const input = document.querySelector('#newPersonName'); const name = input.value.trim(); if (!name) return; pool.people.push({ id: Date.now(), name, paid: 0 }); input.value = ''; savePool(); render(); input.focus(); });
 document.querySelector('#loadExample').addEventListener('click', () => { pool = JSON.parse(JSON.stringify(examplePool)); savePool(); render(); });
 document.querySelector('#resetPool').addEventListener('click', () => { if (window.confirm('Clear this pool and all its people?')) { pool = { name: 'New shared pool', target: 0, people: [] }; savePool(); render(); } });
+document.querySelector('#loadMessyExample').addEventListener('click', () => { document.querySelector('#importText').value = messyImportExample; document.querySelector('#importReport').classList.remove('has-results'); document.querySelector('#importReport').innerHTML = '<span>Messy example loaded. Click Review and import to clean it.</span>'; });
+document.querySelector('#importFile').addEventListener('change', event => { const file = event.target.files[0]; if (!file) return; const reader = new FileReader(); reader.addEventListener('load', () => { document.querySelector('#importText').value = reader.result; document.querySelector('#importReport').classList.remove('has-results'); document.querySelector('#importReport').innerHTML = `<span>${escapeHtml(file.name)} loaded. Click Review and import to clean it.</span>`; }); reader.readAsText(file); });
+document.querySelector('#importContributions').addEventListener('click', () => { const text = document.querySelector('#importText').value; if (!text.trim()) { document.querySelector('#importReport').innerHTML = '<span>Add a CSV file or paste a contribution list first.</span>'; return; } const result = cleanImport(text); renderImportReport(result); if (result.people.length) { pool.people = result.people; savePool(); render(); renderImportReport(result); } });
 render();
