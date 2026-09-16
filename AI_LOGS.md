@@ -62,3 +62,79 @@ The editor diagnostics are clean, and there is no installed headless browser in 
 ## Assistant
 
 The final checks are clean: JavaScript parses, the served HTML and CSS load, the editor reports no file errors, and `git diff --check` finds no whitespace problems. I’m marking the implementation and documentation complete, then I’ll stop the local server so the workspace is left tidy.
+
+## Continuation: messy contribution import
+
+## User
+
+can you do these in this project :**The Twist
+
+Your solution must also import a messy list of past contributions — with duplicate entries, the same person’s name spelled differently, amounts written in inconsistent formats, and some invalid rows. Import it, produce correct balances from the cleaned data, and report what was imported, de-duplicated, merged, and rejected.
+
+**
+
+## Assistant
+
+I’ll extend the existing tracker with a contribution-import workflow: paste or upload messy CSV data, normalize names and amounts, detect duplicate rows, merge spelling variants, reject invalid rows, and show an import report before applying the cleaned totals. I’ll first inspect the current markup and state flow so the new feature fits the existing app rather than creating a second data model.
+
+## Assistant
+
+The existing app has one `pool.people` array and one `render()` pipeline, so the cleanest extension is to make import produce normalized totals and then feed those totals into that same array. I’ll add a dedicated import panel with a sample messy dataset, file upload or paste input, and an explicit report showing valid rows, duplicates removed, name variants merged, and invalid rows rejected.
+
+## Assistant
+
+The import panel is now wired into the page structure. Next I’m styling the file controls, textarea, and report so the cleaning outcome is easy to scan without competing with the main balances.
+
+## Assistant
+
+The visual layer is ready. I’m implementing the cleaner now with four explicit outcomes: valid rows are parsed, exact duplicate rows are discarded, spelling/capitalization variants are grouped under the first clean name, and invalid rows are retained in the report with their line number and reason. Import will replace the current contribution list while preserving the pool name and target.
+
+## Assistant
+
+The import logic is in place and intentionally replaces the current contribution list only after parsing succeeds, so the report and balances stay consistent. The sample includes currency symbols, commas, spaces, case/whitespace variants, a repeated row, a missing name, a non-numeric amount, and a negative amount; I’m running the focused syntax check now before touching documentation.
+
+## Assistant
+
+The focused checks are clean. I’m documenting the new workflow next so an evaluator can see exactly how messy imports are supported, what the cleaning rules mean, and how to verify the feature using the built-in sample.
+
+## Assistant
+
+The feature is now documented in both README and REASONING, including the exact cleanup rules and the report semantics. The built-in sample should produce 7 valid rows, 6 cleaned people, 2 duplicate rows removed, 1 merged variant row, 3 rejected rows, and ₹6,300 in cleaned contributions; I’m checking delivery and final diffs now.
+
+## Assistant
+
+The code and editor diagnostics are clean. Port 8000 is already occupied by the earlier local server, which is fine; I’ll use that existing server for the delivery check and run a small DOM harness against the actual script to verify the messy example produces the expected import report.
+
+## Assistant
+
+The end-to-end smoke test passed against the actual `script.js`: the built-in messy list reports 2 duplicates removed, 3 rejected rows, and ₹6,300 cleaned contributions. The static server also serves the new import controls; I’m doing the final status check and closing the task.
+
+## Assistant
+
+Implemented the messy contribution import feature.
+
+### New functionality
+
+- Upload `.csv` or `.txt` files
+- Paste contribution data manually
+- Load a built-in messy example
+- Clean formats such as `₹1,500` and `1 800`
+- Merge capitalization and simple spelling variations
+- Remove duplicate rows
+- Reject invalid rows with line numbers and reasons
+- Replace the current contribution list with cleaned totals
+- Automatically recalculate balances and settlements
+- Display an import report showing valid rows, people created, duplicate rows removed, rows merged, rejected rows, and cleaned total
+
+Use it by clicking **Load messy example**, then **Review and import**.
+
+The sample produces:
+
+```text
+7 valid rows
+6 people
+2 duplicates removed
+1 row merged
+3 rejected rows
+₹6,300 cleaned contributions
+```
